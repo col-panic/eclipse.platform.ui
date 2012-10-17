@@ -7,6 +7,7 @@
  * 
  * Contributors:
  *     IBM Corporation - initial API and implementation
+ *     Marco Descher <descher@medevit.at> - Bug 389063 Dynamic Menu Contribution
  *******************************************************************************/
 package org.eclipse.e4.ui.workbench.renderers.swt;
 
@@ -933,6 +934,21 @@ public class MenuManagerRenderer extends SWTPartRenderer {
 		if (val != element.isVisible()) {
 			element.setVisible(val);
 			menuManager.markDirty();
+		}
+	}
+
+	/**
+	 * @param menuManager
+	 * @param menuModel
+	 * @param dump
+	 */
+	public void removeDynamicMenuContributions(MenuManager menuManager,
+			MMenu menuModel, ArrayList<MMenuElement> dump) {
+		removeMenuContributions(menuModel, dump);
+		for (MMenuElement mMenuElement : dump) {
+			IContributionItem ici = getContribution(mMenuElement);
+			menuManager.remove(ici);
+			clearModelToContribution(menuModel, ici);
 		}
 	}
 }
