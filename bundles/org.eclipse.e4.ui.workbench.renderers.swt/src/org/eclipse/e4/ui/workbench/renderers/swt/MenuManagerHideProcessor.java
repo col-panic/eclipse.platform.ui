@@ -62,8 +62,8 @@ public class MenuManagerHideProcessor implements IMenuListener2 {
 		if (menuModel instanceof MPopupMenu) {
 			hidePopup(menu, (MPopupMenu) menuModel, menuManager);
 		}
-
-		processDynamicElements(menu, menuModel);
+		if (menuModel != null && menu != null)
+			processDynamicElements(menu, menuModel);
 	}
 
 	/**

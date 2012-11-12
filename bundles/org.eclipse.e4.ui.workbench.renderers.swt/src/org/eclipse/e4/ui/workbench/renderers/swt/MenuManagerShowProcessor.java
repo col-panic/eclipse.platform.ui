@@ -79,7 +79,8 @@ public class MenuManagerShowProcessor implements IMenuListener2 {
 		final MMenu menuModel = renderer.getMenuModel(menuManager);
 		final Menu menu = menuManager.getMenu();
 
-		processDynamicElements(menuModel, menuManager);
+		if (menuModel != null && menuManager != null)
+			processDynamicElements(menuModel, menuManager);
 
 		if (menuModel != null && menuManager != null) {
 			cleanUp(menu, menuModel, menuManager);
