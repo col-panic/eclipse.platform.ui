@@ -51,6 +51,8 @@ public class MenuManagerHideProcessor implements IMenuListener2 {
 	 * @see
 	 * org.eclipse.jface.action.IMenuListener#menuAboutToShow(org.eclipse.jface
 	 * .action.IMenuManager)
+	 * 
+	 * SWT.Hide pre-processing method for MenuManager
 	 */
 	public void menuAboutToShow(IMenuManager manager) {
 		if (!(manager instanceof MenuManager)) {
@@ -92,8 +94,8 @@ public class MenuManagerHideProcessor implements IMenuListener2 {
 									.create();
 							@SuppressWarnings("unchecked")
 							ArrayList<MMenuElement> mel = (ArrayList<MMenuElement>) currentMenuElement
-									.getTransientData().get(
-											currentMenuElement.getElementId());
+									.getTransientData()
+									.get(MenuManagerShowProcessor.DYNAMIC_ELEMENT_STORAGE_KEY);
 							dynamicMenuContext.set(List.class, mel);
 							ContextInjectionFactory.invoke(contribution,
 									AboutToHide.class, dynamicMenuContext);

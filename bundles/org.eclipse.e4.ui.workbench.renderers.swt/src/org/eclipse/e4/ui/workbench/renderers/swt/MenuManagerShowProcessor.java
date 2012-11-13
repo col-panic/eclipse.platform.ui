@@ -79,9 +79,6 @@ public class MenuManagerShowProcessor implements IMenuListener2 {
 		final MMenu menuModel = renderer.getMenuModel(menuManager);
 		final Menu menu = menuManager.getMenu();
 
-		if (menuModel != null && menuManager != null)
-			processDynamicElements(menuModel, menuManager);
-
 		if (menuModel != null && menuManager != null) {
 			cleanUp(menu, menuModel, menuManager);
 		}
@@ -106,6 +103,8 @@ public class MenuManagerShowProcessor implements IMenuListener2 {
 	 * @see
 	 * org.eclipse.jface.action.IMenuListener2#menuAboutToHide(org.eclipse.jface
 	 * .action.IMenuManager)
+	 * 
+	 * SWT.Show post processing method for MenuManager
 	 */
 	public void menuAboutToHide(IMenuManager manager) {
 		if (!(manager instanceof MenuManager)) {
@@ -115,9 +114,17 @@ public class MenuManagerShowProcessor implements IMenuListener2 {
 		final MMenu menuModel = renderer.getMenuModel(menuManager);
 		final Menu menu = menuManager.getMenu();
 		if (menuModel != null) {
+			processDynamicElements(menuModel, menuManager);
 			showMenu(menu, menuModel, menuManager);
 		}
 	}
+
+	/**
+	 * HashMap key for storage of {@link MDynamicMenuContribution} elements used
+	 * in {@link #processDynamicElements(MMenu, MenuManager)}
+	 */
+	protected static final String DYNAMIC_ELEMENT_STORAGE_KEY = MenuManagerShowProcessor.class
+			.getSimpleName() + ".dynamicElements"; //$NON-NLS-1$
 
 	/**
 	 * Process dynamic menu contributions provided by
@@ -159,12 +166,12 @@ public class MenuManagerShowProcessor implements IMenuListener2 {
 						.getTransientData();
 				@SuppressWarnings("unchecked")
 				ArrayList<MMenuElement> dump = (ArrayList<MMenuElement>) storageMap
-						.get(currentMenuElement.getElementId());
+						.get(DYNAMIC_ELEMENT_STORAGE_KEY);
 				if (dump != null && dump.size() > 0)
 					renderer.removeDynamicMenuContributions(menuManager,
 							menuModel, dump);
 
-				storageMap.remove(currentMenuElement.getElementId());
+				storageMap.remove(DYNAMIC_ELEMENT_STORAGE_KEY);
 
 				// ensure that each element of the list has a valid element id
 				// and set the parent of the entries
@@ -177,7 +184,7 @@ public class MenuManagerShowProcessor implements IMenuListener2 {
 					menuElement.setParent(currentMenuElement.getParent());
 					renderer.modelProcessSwitch(menuManager, menuElement);
 				}
-				storageMap.put(currentMenuElement.getElementId(), mel);
+				storageMap.put(DYNAMIC_ELEMENT_STORAGE_KEY, mel);
 			}
 		}
 	}
